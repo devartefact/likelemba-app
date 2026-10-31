@@ -4,6 +4,8 @@ import { parseIsoDate } from './dates.js'
 // Keeps the currency from wrapping alone onto the next line.
 const NON_BREAKING_SPACE = String.fromCharCode(160)
 
+const LONG_DATE_FORMAT = { day: 'numeric', month: 'long', year: 'numeric' }
+
 export const FREQUENCY_LABELS = {
   [FREQUENCY.WEEKLY]: 'Chaque semaine',
   [FREQUENCY.BIWEEKLY]: 'Chaque quinzaine',
@@ -21,11 +23,11 @@ export function formatAmount(amount, currency) {
 }
 
 export function formatDate(isoDate) {
-  return parseIsoDate(isoDate).toLocaleDateString('fr-FR', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  })
+  return parseIsoDate(isoDate).toLocaleDateString('fr-FR', LONG_DATE_FORMAT)
+}
+
+export function formatTimestamp(timestamp) {
+  return new Date(timestamp).toLocaleDateString('fr-FR', LONG_DATE_FORMAT)
 }
 
 export function formatMemberCount(count) {

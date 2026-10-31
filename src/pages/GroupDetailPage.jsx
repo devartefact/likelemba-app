@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router'
 import ConfirmationModal from '../components/ConfirmationModal.jsx'
 import GroupNotFound from '../components/GroupNotFound.jsx'
 import MemberManager from '../components/MemberManager.jsx'
+import PaymentList from '../components/PaymentList.jsx'
 import RoundSchedule from '../components/RoundSchedule.jsx'
 import StartGroupPanel from '../components/StartGroupPanel.jsx'
 import StatusBadge from '../components/StatusBadge.jsx'
@@ -20,6 +21,7 @@ function GroupDetailPage({ user }) {
   if (!group) return <GroupNotFound />
 
   const isInSetup = group.status === GROUP_STATUS.SETUP
+  const isActive = group.status === GROUP_STATUS.ACTIVE
 
   function confirmDeletion() {
     deleteGroup(groupId, user.id)
@@ -61,7 +63,10 @@ function GroupDetailPage({ user }) {
           <StartGroupPanel group={group} userId={user.id} onGroupChange={setGroup} />
         </>
       ) : (
-        <RoundSchedule group={group} />
+        <>
+          {isActive && <PaymentList group={group} userId={user.id} onGroupChange={setGroup} />}
+          <RoundSchedule group={group} />
+        </>
       )}
 
       {isConfirmingDeletion && (

@@ -26,6 +26,16 @@ export function requireGroupInSetup(groupId, userId) {
   return group
 }
 
+export function requireActiveGroup(groupId, userId) {
+  const group = requireGroup(groupId, userId)
+
+  if (group.status !== GROUP_STATUS.ACTIVE) {
+    throw new Error("Ce groupe n'est pas en cours.")
+  }
+
+  return group
+}
+
 export function saveGroup(updatedGroup) {
   const groups = readAllGroups().map((group) => (group.id === updatedGroup.id ? updatedGroup : group))
 

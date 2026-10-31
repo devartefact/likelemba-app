@@ -13,6 +13,11 @@ function calculateDueDate(startDate, frequency, roundIndex) {
   return toIsoDate(addMonths(start, roundIndex))
 }
 
+// The current round is the first one that has not been closed yet.
+export function getCurrentRound({ rounds }) {
+  return rounds.find((round) => round.closedAt === null)
+}
+
 // One round per member, in the order of the members list.
 export function buildRounds({ members, startDate, frequency }) {
   return members.map((member, index) => ({
