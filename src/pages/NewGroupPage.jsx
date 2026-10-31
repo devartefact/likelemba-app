@@ -14,7 +14,7 @@ function NewGroupPage({ user }) {
 
   return (
     <main className="max-w-xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6">Nouveau groupe</h1>
+      <h1 className="text-3xl font-light mb-6">Nouveau groupe</h1>
       <GroupForm submitLabel="Créer le groupe" cancelPath={ROUTES.HOME} onSave={saveGroup} />
     </main>
   )

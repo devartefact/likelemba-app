@@ -27,10 +27,18 @@ Le cahier des charges complet est dans `../../master-prompt-likelemba.md`.
   - `services/` : les données ; seul `services/storage.js` touche à `localStorage`.
   - `utils/` : des fonctions simples, sans React.
 
+## Design
+
+- Style : grand panneau aux coins très arrondis sur fond gris-bleu, dégradé du gris clair au jaune pâle, police Outfit légère, jaune soleil comme accent.
+- Boutons et champs en forme de pilule, cartes translucides, cartes jaunes pour ce qui est le plus important.
+- Le thème est dans `src/index.css` : y changer les couleurs et les formes plutôt que dans chaque composant.
+- Le texte reste lisible : pas de texte gris clair ni de jaune sur fond clair.
+
 ## Façon de travailler
 
 - Une fonctionnalité à la fois, dans l'ordre du plan. Attendre la validation avant de passer à la suivante.
 - Faire un commit git local après chaque fonctionnalité validée, jamais avant.
+- Les messages de commit suivent Conventional Commits, en une seule ligne courte : `feat: add round history`.
 - Après chaque fonctionnalité, expliquer ce qui a été fait, les fichiers touchés et comment tester.
 - Signaler ce qui ne serait pas assez sécurisé pour une vraie application.
 - Les 2 heures de l'atelier ne limitent pas le périmètre.

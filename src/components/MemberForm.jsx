@@ -33,7 +33,7 @@ function MemberForm({ member, submitLabel, onSave, onCancel }) {
             Annuler
           </button>
         )}
-        <button type="submit" className="btn btn-sm" disabled={isSubmitting}>
+        <button type="submit" className="btn btn-outline btn-sm" disabled={isSubmitting}>
           {submitLabel}
         </button>
       </div>

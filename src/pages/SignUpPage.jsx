@@ -1,5 +1,6 @@
 import AuthFormLayout from '../components/AuthFormLayout.jsx'
 import FormField from '../components/FormField.jsx'
+import PasswordField from '../components/PasswordField.jsx'
 import { MIN_PASSWORD_LENGTH } from '../constants.js'
 import { useForm } from '../hooks/useForm.js'
 import { ROUTES } from '../routes.js'
@@ -16,6 +17,7 @@ function SignUpPage({ onLogin }) {
   return (
     <AuthFormLayout
       title="Créer un compte"
+      subtitle="Organise ta likelemba sans cahier ni disputes"
       generalError={generalError}
       submitLabel="Créer mon compte"
       isSubmitting={isSubmitting}
@@ -26,13 +28,12 @@ function SignUpPage({ onLogin }) {
     >
       <FormField label="Nom" autoComplete="name" {...fieldProps('name')} />
       <FormField label="Adresse e-mail" type="email" autoComplete="email" {...fieldProps('email')} />
-      <FormField
+      <PasswordField
         label={`Mot de passe (${MIN_PASSWORD_LENGTH} caractères minimum)`}
-        type="password"
         autoComplete="new-password"
         {...fieldProps('password')}
       />
-      <FormField label="Confirmer le mot de passe" type="password" autoComplete="new-password" {...fieldProps('confirmation')} />
+      <PasswordField label="Confirmer le mot de passe" autoComplete="new-password" {...fieldProps('confirmation')} />
     </AuthFormLayout>
   )
 }

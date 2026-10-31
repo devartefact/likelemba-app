@@ -33,7 +33,7 @@ function GroupForm({ group, submitLabel, cancelPath, onSave }) {
   })
 
   return (
-    <form className="card bg-base-100 shadow-md card-body" onSubmit={handleSubmit} noValidate>
+    <form className="surface-card card card-body" onSubmit={handleSubmit} noValidate>
       <ErrorAlert message={generalError} />
 
       <FormField label="Nom du groupe" autoComplete="off" {...fieldProps('name')} />

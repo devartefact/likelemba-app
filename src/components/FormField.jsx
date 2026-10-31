@@ -1,6 +1,6 @@
 import { useId } from 'react'
 
-function FormField({ label, type = 'text', value, onChange, error, autoComplete }) {
+function FormField({ label, type = 'text', value, onChange, error, autoComplete, endAdornment }) {
   const inputId = useId()
 
   return (
@@ -8,16 +8,19 @@ function FormField({ label, type = 'text', value, onChange, error, autoComplete 
       <label htmlFor={inputId} className="fieldset-legend">
         {label}
       </label>
-      <input
-        id={inputId}
-        type={type}
-        className={`input w-full ${error ? 'input-error' : ''}`}
-        value={value}
-        onChange={(event) => onChange(event.target.value)}
-        autoComplete={autoComplete}
-        aria-invalid={Boolean(error)}
-      />
-      {error && <p className="text-red-700 text-sm">{error}</p>}
+      <div className="relative">
+        <input
+          id={inputId}
+          type={type}
+          className={`input w-full ${endAdornment ? 'pr-12' : ''} ${error ? 'input-error' : ''}`}
+          value={value}
+          onChange={(event) => onChange(event.target.value)}
+          autoComplete={autoComplete}
+          aria-invalid={Boolean(error)}
+        />
+        {endAdornment}
+      </div>
+      {error && <p className="text-error text-sm pl-4">{error}</p>}
     </div>
   )
 }

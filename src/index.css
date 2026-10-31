@@ -1,5 +1,139 @@
 @import "tailwindcss";
 
 @plugin "daisyui" {
-  themes: light --default;
+  themes: false;
+}
+
+@plugin "daisyui/theme" {
+  name: "likelemba";
+  default: true;
+  color-scheme: light;
+
+  --color-base-100: #faf8f1;
+  --color-base-200: #f1eee3;
+  --color-base-300: #dedacd;
+  --color-base-content: #26262a;
+
+  --color-primary: #ffd65c;
+  --color-primary-content: #26262a;
+  --color-secondary: #c9d3e6;
+  --color-secondary-content: #26262a;
+  --color-accent: #f2c9a8;
+  --color-accent-content: #26262a;
+  --color-neutral: #2c2c30;
+  --color-neutral-content: #faf8f1;
+
+  --color-info: #c9d3e6;
+  --color-info-content: #26262a;
+  --color-success: #bfe3c0;
+  --color-success-content: #26262a;
+  --color-warning: #ffd65c;
+  --color-warning-content: #26262a;
+  --color-error: #b3302a;
+  --color-error-content: #ffffff;
+
+  --radius-selector: 0.625rem;
+  --radius-field: 9999px;
+  --radius-box: 2rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.3rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+
+@theme {
+  --font-sans: "Outfit", ui-sans-serif, system-ui, sans-serif;
+  --color-soft: #55555c;
+  --color-backdrop: #a9b0be;
+  --color-panel-start: #e7e8ec;
+  --color-panel-middle: #eeeee9;
+  --color-panel-end: #fbeec0;
+}
+
+/* Reserves the scrollbar space so the page does not shift when a modal blocks scrolling. */
+html {
+  scrollbar-gutter: stable;
+}
+
+body {
+  background-color: var(--color-backdrop);
+}
+
+/* The default focus ring takes the color of each button: a yellow ring would disappear on the light panel. */
+:focus-visible {
+  outline: 2px solid var(--color-base-content);
+  outline-offset: 2px;
+}
+
+#root {
+  padding: 1.5rem;
+}
+
+.app-panel {
+  min-height: calc(100vh - 3rem);
+  border-radius: 2.75rem;
+  background: linear-gradient(150deg, var(--color-panel-start) 0%, var(--color-panel-middle) 45%, var(--color-panel-end) 100%);
+  box-shadow: 0 30px 60px -20px rgb(60 65 80 / 0.45);
+}
+
+.surface-card {
+  background-color: rgb(250 248 241 / 0.78);
+  border: 1px solid rgb(255 255 255 / 0.7);
+}
+
+.card-title {
+  font-weight: 400;
+}
+
+.table thead {
+  color: var(--color-soft);
+}
+
+.fieldset-legend {
+  font-weight: 400;
+  color: var(--color-soft);
+  padding-inline-start: 1rem;
+}
+
+.badge {
+  border-radius: 9999px;
+}
+
+/* A thin outline keeps the pale pills visible on the pale panel, as WCAG asks for form controls. */
+.input:not(.input-error),
+.select {
+  --input-color: color-mix(in oklab, var(--color-base-content) 55%, transparent);
+}
+
+.input:focus,
+.select:focus {
+  --input-color: var(--color-base-content);
+}
+
+/* The unfilled part of the bar echoes the hatched block of the calendar. */
+.progress-hatched {
+  height: 0.75rem;
+  background-image: repeating-linear-gradient(
+    -45deg,
+    rgb(38 38 42 / 0.28) 0 2px,
+    transparent 2px 7px
+  );
+}
+
+/* Cuts the rounded notch of the top right corner: the three layers paint everything but the notch. */
+.showcase-frame {
+  border-radius: 2rem;
+  mask:
+    linear-gradient(#000, #000) left top / calc(100% - 88px) 100% no-repeat,
+    linear-gradient(#000, #000) right bottom / 88px calc(100% - 72px) no-repeat,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='88' height='72'%3E%3Cpath d='M0 0C16 0 24 8 24 24C24 40 32 48 48 48H64C80 48 88 56 88 72H0Z'/%3E%3C/svg%3E") right top / 88px 72px no-repeat;
+}
+
+.calendar-hatch {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    rgb(255 255 255 / 0.65) 0 2px,
+    transparent 2px 9px
+  );
 }

@@ -9,7 +9,7 @@ function GroupsPage({ user }) {
   return (
     <main className="max-w-4xl mx-auto p-6">
       <div className="flex items-center justify-between gap-4 mb-6">
-        <h1 className="text-2xl font-bold">Mes groupes</h1>
+        <h1 className="text-3xl font-light">Mes groupes</h1>
         <Link to={ROUTES.NEW_GROUP} className="btn btn-primary">
           Nouveau groupe
         </Link>

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router'
 import ConfirmationModal from '../components/ConfirmationModal.jsx'
 import CycleCompleteMessage from '../components/CycleCompleteMessage.jsx'
+import Figure from '../components/Figure.jsx'
 import GroupNotFound from '../components/GroupNotFound.jsx'
 import MemberManager from '../components/MemberManager.jsx'
 import NextRoundPanel from '../components/NextRoundPanel.jsx'
@@ -35,31 +36,33 @@ function GroupDetailPage({ user }) {
 
   return (
     <main className="max-w-4xl mx-auto p-6">
-      <Link to={ROUTES.HOME} className="link link-primary">
+      <Link to={ROUTES.HOME} className="underline">
         Retour à mes groupes
       </Link>
 
       <div className="flex items-center justify-between gap-4 my-4">
         <div className="flex items-center gap-3">
-          <h1 className="text-2xl font-bold">{group.name}</h1>
+          <h1 className="text-3xl font-light">{group.name}</h1>
           <StatusBadge status={group.status} />
         </div>
         <div className="flex gap-2">
           {isInSetup && (
-            <Link to={editGroupPath(groupId)} className="btn">
+            <Link to={editGroupPath(groupId)} className="btn btn-outline">
               Modifier
             </Link>
           )}
-          <button type="button" className="btn btn-error" onClick={() => setIsConfirmingDeletion(true)}>
+          <button type="button" className="btn btn-outline btn-error" onClick={() => setIsConfirmingDeletion(true)}>
             Supprimer
           </button>
         </div>
       </div>
 
-      <section className="card bg-base-100 shadow-md card-body mb-4">
-        <p><span className="font-semibold">Cotisation :</span> {formatAmount(group.amount, group.currency)}</p>
-        <p><span className="font-semibold">Fréquence :</span> {FREQUENCY_LABELS[group.frequency]}</p>
-        <p><span className="font-semibold">Date de début :</span> {formatDate(group.startDate)}</p>
+      <section className="surface-card card card-body mb-4">
+        <div className="grid grid-cols-3 gap-4">
+          <Figure label="Cotisation" value={formatAmount(group.amount, group.currency)} />
+          <Figure label="Fréquence" value={FREQUENCY_LABELS[group.frequency]} />
+          <Figure label="Date de début" value={formatDate(group.startDate)} />
+        </div>
       </section>
 
       {isInSetup && (

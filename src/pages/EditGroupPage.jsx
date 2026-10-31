@@ -20,7 +20,7 @@ function EditGroupPage({ user }) {
 
   return (
     <main className="max-w-xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6">Modifier le groupe</h1>
+      <h1 className="text-3xl font-light mb-6">Modifier le groupe</h1>
       <GroupForm group={group} submitLabel="Enregistrer" cancelPath={groupPath(groupId)} onSave={saveGroup} />
     </main>
   )

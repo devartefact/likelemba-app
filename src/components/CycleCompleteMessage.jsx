@@ -5,13 +5,11 @@ function CycleCompleteMessage({ group }) {
   const potAmount = formatAmount(getPotAmount(group), group.currency)
 
   return (
-    <section role="status" className="alert alert-success mb-4">
-      <div>
-        <h2 className="text-lg font-bold">Cycle terminé !</h2>
-        <p>
-          Chaque membre a reçu la cagnotte de {potAmount}. Les {group.rounds.length} tours sont clôturés.
-        </p>
-      </div>
+    <section role="status" className="card card-body mb-4 bg-primary text-primary-content">
+      <h2 className="text-3xl font-light">Cycle terminé !</h2>
+      <p>
+        Chaque membre a reçu la cagnotte de {potAmount}. Les {group.rounds.length} tours sont clôturés.
+      </p>
     </section>
   )
 }

@@ -23,7 +23,7 @@ function App() {
   const protectedPage = (page) => <ProtectedRoute user={user}>{page}</ProtectedRoute>
 
   return (
-    <>
+    <div className="app-panel">
       {user && <NavBar user={user} onLogOut={handleLogOut} />}
 
       <Routes>
@@ -35,7 +35,7 @@ function App() {
         <Route path={ROUTES.EDIT_GROUP} element={protectedPage(<EditGroupPage user={user} />)} />
         <Route path="*" element={<Navigate to={ROUTES.HOME} replace />} />
       </Routes>
-    </>
+    </div>
   )
 }
 

@@ -30,6 +30,15 @@ export function formatTimestamp(timestamp) {
   return new Date(timestamp).toLocaleDateString('fr-FR', LONG_DATE_FORMAT)
 }
 
+export function getInitials(name) {
+  return name
+    .trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((word) => word[0].toUpperCase())
+    .join('')
+}
+
 export function formatMemberCount(count) {
   return `${count} membre${count > 1 ? 's' : ''}`
 }

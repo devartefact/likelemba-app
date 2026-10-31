@@ -1,17 +1,14 @@
-import { Link } from 'react-router'
-import { ROUTES } from '../routes.js'
+import Avatar from './Avatar.jsx'
+import Logo from './Logo.jsx'
 
 function NavBar({ user, onLogOut }) {
   return (
-    <nav className="navbar bg-base-100 shadow-sm px-4">
-      <div className="flex-1">
-        <Link to={ROUTES.HOME} className="text-xl font-bold">
-          Likelemba
-        </Link>
-      </div>
-      <div className="flex items-center gap-4">
+    <nav className="flex items-center justify-between gap-4 px-8 pt-6">
+      <Logo />
+      <div className="flex items-center gap-3">
+        <Avatar name={user.name} />
         <span>{user.name}</span>
-        <button type="button" className="btn btn-ghost btn-sm" onClick={onLogOut}>
+        <button type="button" className="btn btn-outline btn-sm" onClick={onLogOut}>
           Se déconnecter
         </button>
       </div>

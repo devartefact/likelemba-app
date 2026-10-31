@@ -1,5 +1,6 @@
 import AuthFormLayout from '../components/AuthFormLayout.jsx'
 import FormField from '../components/FormField.jsx'
+import PasswordField from '../components/PasswordField.jsx'
 import { useForm } from '../hooks/useForm.js'
 import { ROUTES } from '../routes.js'
 import { logIn } from '../services/auth.js'
@@ -15,6 +16,7 @@ function LoginPage({ onLogin }) {
   return (
     <AuthFormLayout
       title="Se connecter"
+      subtitle="Retrouve tes groupes de likelemba"
       generalError={generalError}
       submitLabel="Se connecter"
       isSubmitting={isSubmitting}
@@ -24,7 +26,7 @@ function LoginPage({ onLogin }) {
       footerLinkPath={ROUTES.SIGN_UP}
     >
       <FormField label="Adresse e-mail" type="email" autoComplete="email" {...fieldProps('email')} />
-      <FormField label="Mot de passe" type="password" autoComplete="current-password" {...fieldProps('password')} />
+      <PasswordField label="Mot de passe" autoComplete="current-password" {...fieldProps('password')} />
     </AuthFormLayout>
   )
 }

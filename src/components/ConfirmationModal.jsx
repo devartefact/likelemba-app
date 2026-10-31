@@ -16,7 +16,7 @@ function ConfirmationModal({ title, message, confirmLabel, confirmClassName = 'b
   return (
     <dialog ref={dialogRef} className="modal" onCancel={onCancel}>
       <div className="modal-box">
-        <h2 className="text-lg font-bold">{title}</h2>
+        <h2 className="text-2xl font-light">{title}</h2>
         <p className="py-4">{message}</p>
         <div className="modal-action">
           <button type="button" className="btn btn-ghost" onClick={onCancel}>

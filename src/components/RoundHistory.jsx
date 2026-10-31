@@ -6,7 +6,7 @@ function RoundHistory({ group }) {
   const potAmount = formatAmount(getPotAmount(group), group.currency)
 
   return (
-    <section className="card bg-base-100 shadow-md card-body mb-4">
+    <section className="surface-card card card-body mb-4">
       <h2 className="card-title">Historique des tours</h2>
 
       {closedRounds.length === 0 ? (

@@ -25,12 +25,12 @@ function MemberManager({ group, userId, onGroupChange }) {
   }
 
   return (
-    <section className="card bg-base-100 shadow-md card-body mb-4">
+    <section className="surface-card card card-body mb-4">
       <div className="flex items-center justify-between gap-4">
         <h2 className="card-title">Membres et ordre de passage ({members.length})</h2>
         <button
           type="button"
-          className="btn btn-sm"
+          className="btn btn-outline btn-sm"
           onClick={() => run(() => shuffleMembers(groupId, userId))}
           disabled={members.length < MIN_MEMBERS_TO_SHUFFLE}
         >

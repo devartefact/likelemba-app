@@ -17,7 +17,7 @@ function StartGroupPanel({ group, userId, onGroupChange }) {
   }
 
   return (
-    <section className="card bg-base-100 shadow-md card-body">
+    <section className="surface-card card card-body">
       <ErrorAlert message={actionError} />
 
       <div className="flex items-center justify-between gap-4">

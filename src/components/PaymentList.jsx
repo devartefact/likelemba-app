@@ -17,7 +17,7 @@ function PaymentList({ group, userId, onGroupChange }) {
   }
 
   return (
-    <section className="card bg-base-100 shadow-md card-body mb-4">
+    <section className="surface-card card card-body mb-4">
       <div className="flex items-center justify-between gap-4">
         <h2 className="card-title">Cotisations</h2>
         <p className="text-sm grow-0">

@@ -8,7 +8,7 @@ function RoundSchedule({ group }) {
   const currentRound = getCurrentRound(group)
 
   return (
-    <section className="card bg-base-100 shadow-md card-body">
+    <section className="surface-card card card-body">
       <h2 className="card-title">Ordre de passage ({group.members.length} membres)</h2>
       <table className="table">
         <thead>
@@ -25,7 +25,7 @@ function RoundSchedule({ group }) {
             const isCurrent = round.number === currentRound?.number
 
             return (
-              <tr key={round.number} className={isCurrent ? 'bg-base-200 font-semibold' : ''}>
+              <tr key={round.number} className={isCurrent ? 'bg-primary/50 font-medium' : ''}>
                 <td>{round.number}</td>
                 <td>{beneficiary.name}</td>
                 <td>{beneficiary.phone || NO_PHONE_LABEL}</td>

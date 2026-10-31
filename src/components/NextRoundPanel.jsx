@@ -21,7 +21,7 @@ function NextRoundPanel({ group, userId, onGroupChange }) {
   }
 
   return (
-    <section className="card bg-base-100 shadow-md card-body mb-4">
+    <section className="surface-card card card-body mb-4">
       <ErrorAlert message={actionError} />
 
       <div className="flex items-center justify-between gap-4">
