@@ -66,6 +66,12 @@ export function validateLogin({ email, password }) {
   })
 }
 
+export function validateMember({ name }) {
+  return keepOnlyErrors({
+    name: requireText(name, 'Saisis le nom du membre.'),
+  })
+}
+
 export function validateGroup({ name, amount, startDate }) {
   return keepOnlyErrors({
     name: requireText(name, 'Saisis le nom du groupe.'),

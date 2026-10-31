@@ -2,6 +2,9 @@ import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router'
 import ConfirmationModal from '../components/ConfirmationModal.jsx'
 import GroupNotFound from '../components/GroupNotFound.jsx'
+import MemberManager from '../components/MemberManager.jsx'
+import RoundSchedule from '../components/RoundSchedule.jsx'
+import StartGroupPanel from '../components/StartGroupPanel.jsx'
 import StatusBadge from '../components/StatusBadge.jsx'
 import { GROUP_STATUS } from '../constants.js'
 import { ROUTES, editGroupPath } from '../routes.js'
@@ -12,9 +15,11 @@ function GroupDetailPage({ user }) {
   const { id: groupId } = useParams()
   const navigate = useNavigate()
   const [isConfirmingDeletion, setIsConfirmingDeletion] = useState(false)
-  const group = getGroup(groupId, user.id)
+  const [group, setGroup] = useState(() => getGroup(groupId, user.id))
 
   if (!group) return <GroupNotFound />
+
+  const isInSetup = group.status === GROUP_STATUS.SETUP
 
   function confirmDeletion() {
     deleteGroup(groupId, user.id)
@@ -33,7 +38,7 @@ function GroupDetailPage({ user }) {
           <StatusBadge status={group.status} />
         </div>
         <div className="flex gap-2">
-          {group.status === GROUP_STATUS.SETUP && (
+          {isInSetup && (
             <Link to={editGroupPath(groupId)} className="btn">
               Modifier
             </Link>
@@ -50,14 +55,14 @@ function GroupDetailPage({ user }) {
         <p><span className="font-semibold">Date de début :</span> {formatDate(group.startDate)}</p>
       </section>
 
-      <section className="card bg-base-100 shadow-md card-body">
-        <h2 className="card-title">Membres ({group.members.length})</h2>
-        <ul className="list-disc list-inside">
-          {group.members.map((member) => (
-            <li key={member.id}>{member.name}</li>
-          ))}
-        </ul>
-      </section>
+      {isInSetup ? (
+        <>
+          <MemberManager group={group} userId={user.id} onGroupChange={setGroup} />
+          <StartGroupPanel group={group} userId={user.id} onGroupChange={setGroup} />
+        </>
+      ) : (
+        <RoundSchedule group={group} />
+      )}
 
       {isConfirmingDeletion && (
         <ConfirmationModal

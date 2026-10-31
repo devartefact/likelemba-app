@@ -13,3 +13,4 @@ export const GROUP_STATUS = {
 }
 
 export const MIN_PASSWORD_LENGTH = 6
+export const MIN_MEMBERS_TO_START = 2

@@ -15,6 +15,10 @@ export function useForm({ initialValues, validate, onSubmit }) {
     }
   }
 
+  function reset() {
+    setValues(initialValues)
+  }
+
   async function handleSubmit(event) {
     event.preventDefault()
 
@@ -35,5 +39,5 @@ export function useForm({ initialValues, validate, onSubmit }) {
     }
   }
 
-  return { generalError: errors.general, isSubmitting, fieldProps, handleSubmit }
+  return { generalError: errors.general, isSubmitting, fieldProps, handleSubmit, reset }
 }

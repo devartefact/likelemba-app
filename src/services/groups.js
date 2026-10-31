@@ -1,4 +1,5 @@
-import { GROUP_STATUS } from '../constants.js'
+import { GROUP_STATUS, MIN_MEMBERS_TO_START } from '../constants.js'
+import { buildRounds } from '../utils/rounds.js'
 import { readStoredValue, writeStoredValue } from './storage.js'
 
 const GROUPS_KEY = 'likelemba_groups'
@@ -13,6 +14,24 @@ function requireGroup(groupId, userId) {
   if (!group) throw new Error('Ce groupe est introuvable.')
 
   return group
+}
+
+export function requireGroupInSetup(groupId, userId) {
+  const group = requireGroup(groupId, userId)
+
+  if (group.status !== GROUP_STATUS.SETUP) {
+    throw new Error('Un groupe déjà démarré ne peut plus être modifié.')
+  }
+
+  return group
+}
+
+export function saveGroup(updatedGroup) {
+  const groups = readAllGroups().map((group) => (group.id === updatedGroup.id ? updatedGroup : group))
+
+  writeStoredValue(GROUPS_KEY, groups)
+
+  return updatedGroup
 }
 
 // WARNING: this is only a display filter, not real protection.
@@ -45,17 +64,9 @@ export function createGroup(owner, groupDetails) {
 }
 
 export function updateGroup(groupId, userId, groupDetails) {
-  const group = requireGroup(groupId, userId)
+  const group = requireGroupInSetup(groupId, userId)
 
-  if (group.status !== GROUP_STATUS.SETUP) {
-    throw new Error('Un groupe déjà démarré ne peut plus être modifié.')
-  }
-
-  const groups = readAllGroups().map((candidate) =>
-    candidate.id === groupId ? { ...candidate, ...groupDetails } : candidate,
-  )
-
-  writeStoredValue(GROUPS_KEY, groups)
+  return saveGroup({ ...group, ...groupDetails })
 }
 
 export function deleteGroup(groupId, userId) {
@@ -64,4 +75,15 @@ export function deleteGroup(groupId, userId) {
   const remainingGroups = readAllGroups().filter((group) => group.id !== groupId)
 
   writeStoredValue(GROUPS_KEY, remainingGroups)
+}
+
+// Starting creates the rounds: from then on, the members and their order are locked.
+export function startGroup(groupId, userId) {
+  const group = requireGroupInSetup(groupId, userId)
+
+  if (group.members.length < MIN_MEMBERS_TO_START) {
+    throw new Error(`Il faut au moins ${MIN_MEMBERS_TO_START} membres pour démarrer.`)
+  }
+
+  return saveGroup({ ...group, status: GROUP_STATUS.ACTIVE, rounds: buildRounds(group) })
 }

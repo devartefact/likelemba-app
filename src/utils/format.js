@@ -1,4 +1,5 @@
 import { FREQUENCY, GROUP_STATUS } from '../constants.js'
+import { parseIsoDate } from './dates.js'
 
 // Keeps the currency from wrapping alone onto the next line.
 const NON_BREAKING_SPACE = String.fromCharCode(160)
@@ -20,10 +21,7 @@ export function formatAmount(amount, currency) {
 }
 
 export function formatDate(isoDate) {
-  const [year, month, day] = isoDate.split('-').map(Number)
-
-  // Built in local time: parsing the ISO text directly would read it as UTC and could shift the day.
-  return new Date(year, month - 1, day).toLocaleDateString('fr-FR', {
+  return parseIsoDate(isoDate).toLocaleDateString('fr-FR', {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
