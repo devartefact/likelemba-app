@@ -1,10 +1,11 @@
 import { formatDate } from '../utils/format.js'
+import { getBeneficiary, getCurrentRound } from '../utils/rounds.js'
 
 const NO_PHONE_LABEL = '—'
 
-// The locked order of the cycle, once the group has started.
+// The locked order of the cycle, with the current round highlighted.
 function RoundSchedule({ group }) {
-  const findMember = (memberId) => group.members.find((member) => member.id === memberId)
+  const currentRound = getCurrentRound(group)
 
   return (
     <section className="card bg-base-100 shadow-md card-body">
@@ -20,10 +21,11 @@ function RoundSchedule({ group }) {
         </thead>
         <tbody>
           {group.rounds.map((round) => {
-            const beneficiary = findMember(round.beneficiaryId)
+            const beneficiary = getBeneficiary(group, round)
+            const isCurrent = round.number === currentRound?.number
 
             return (
-              <tr key={round.number}>
+              <tr key={round.number} className={isCurrent ? 'bg-base-200 font-semibold' : ''}>
                 <td>{round.number}</td>
                 <td>{beneficiary.name}</td>
                 <td>{beneficiary.phone || NO_PHONE_LABEL}</td>

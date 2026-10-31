@@ -8,7 +8,11 @@ function PaymentRow({ member, paidAt, isBeneficiary, onToggle }) {
         {member.name}
         {isBeneficiary && <span className="badge badge-outline badge-sm ml-2">Bénéficiaire du tour</span>}
       </span>
-      {paidAt && <span className="text-sm">Payé le {formatTimestamp(paidAt)}</span>}
+      {paidAt ? (
+        <span className="text-sm">Payé le {formatTimestamp(paidAt)}</span>
+      ) : (
+        <span className="text-sm text-red-700">Reste à payer</span>
+      )}
     </label>
   )
 }
