@@ -1,0 +1,7 @@
+/* Charge Tailwind CSS (les classes utilitaires) */
+@import "tailwindcss";
+
+/* Charge DaisyUI (les composants) avec un seul thème clair */
+@plugin "daisyui" {
+  themes: light --default;
+}
