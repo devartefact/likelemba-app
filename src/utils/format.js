@@ -1,35 +1,35 @@
-// Fonctions et libellés d'affichage, sans React.
+import { FREQUENCY, GROUP_STATUS } from '../constants.js'
 
-export const DEVISES = ['CDF', 'USD']
+// Keeps the currency from wrapping alone onto the next line.
+const NON_BREAKING_SPACE = String.fromCharCode(160)
 
-export const FREQUENCES = {
-  semaine: 'Chaque semaine',
-  quinzaine: 'Chaque quinzaine',
-  mois: 'Chaque mois',
+export const FREQUENCY_LABELS = {
+  [FREQUENCY.WEEKLY]: 'Chaque semaine',
+  [FREQUENCY.BIWEEKLY]: 'Chaque quinzaine',
+  [FREQUENCY.MONTHLY]: 'Chaque mois',
 }
 
-export const STATUTS = {
-  preparation: 'En préparation',
-  en_cours: 'En cours',
-  termine: 'Terminé',
+export const STATUS_LABELS = {
+  [GROUP_STATUS.SETUP]: 'En préparation',
+  [GROUP_STATUS.ACTIVE]: 'En cours',
+  [GROUP_STATUS.COMPLETED]: 'Terminé',
 }
 
-// L'espace insécable évite que la devise passe seule à la ligne.
-const ESPACE_INSECABLE = String.fromCharCode(160)
-
-// 150000 et « CDF » donnent « 150 000 CDF ».
-export function formaterMontant(montant, devise) {
-  return `${new Intl.NumberFormat('fr-FR').format(montant)}${ESPACE_INSECABLE}${devise}`
+export function formatAmount(amount, currency) {
+  return `${new Intl.NumberFormat('fr-FR').format(amount)}${NON_BREAKING_SPACE}${currency}`
 }
 
-// « 2026-11-07 » donne « 7 novembre 2026 ».
-export function formaterDate(dateTexte) {
-  const [annee, mois, jour] = dateTexte.split('-').map(Number)
+export function formatDate(isoDate) {
+  const [year, month, day] = isoDate.split('-').map(Number)
 
-  // On construit la date en heure locale pour ne jamais décaler le jour
-  return new Date(annee, mois - 1, jour).toLocaleDateString('fr-FR', {
+  // Built in local time: parsing the ISO text directly would read it as UTC and could shift the day.
+  return new Date(year, month - 1, day).toLocaleDateString('fr-FR', {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
   })
+}
+
+export function formatMemberCount(count) {
+  return `${count} membre${count > 1 ? 's' : ''}`
 }

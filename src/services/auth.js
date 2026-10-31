@@ -1,106 +1,75 @@
-import { ecrireDonnee, lireDonnee, supprimerDonnee } from './stockage.js'
+import { generateSalt, hashPassword } from './password.js'
+import { readStoredValue, removeStoredValue, writeStoredValue } from './storage.js'
 
-const CLE_UTILISATEURS = 'likelemba_utilisateurs'
-const CLE_SESSION = 'likelemba_session'
+const USERS_KEY = 'likelemba_users'
+const SESSION_KEY = 'likelemba_session'
 
-// Transforme des octets en texte hexadécimal, plus facile à enregistrer.
-function enHexadecimal(octets) {
-  return Array.from(octets)
-    .map((octet) => octet.toString(16).padStart(2, '0'))
-    .join('')
+function readUsers() {
+  return readStoredValue(USERS_KEY, [])
 }
 
-// Le sel est un texte aléatoire propre à chaque compte : deux mots de passe
-// identiques ne donnent ainsi jamais le même résultat une fois hachés.
-function genererSel() {
-  return enHexadecimal(crypto.getRandomValues(new Uint8Array(16)))
+function openSession(user) {
+  writeStoredValue(SESSION_KEY, { userId: user.id })
 }
 
-// Transforme le mot de passe en empreinte SHA-256, sans retour possible.
-// ATTENTION : suffisant pour un atelier, pas pour une vraie application.
-// Il faudrait un serveur et un algorithme lent comme bcrypt ou Argon2.
-async function hacherMotDePasse(motDePasse, sel) {
-  // crypto.subtle n'existe que sur localhost ou en HTTPS
-  if (!crypto.subtle) {
-    throw new Error("Ouvre l'application sur localhost ou en HTTPS pour gérer les comptes.")
-  }
-
-  const octets = new TextEncoder().encode(sel + motDePasse)
-  const empreinte = await crypto.subtle.digest('SHA-256', octets)
-
-  return enHexadecimal(new Uint8Array(empreinte))
-}
-
-// Met l'e-mail sous une seule forme : « Ami@X.cd » et « ami@x.cd » sont le même compte.
-function normaliserEmail(email) {
+function normalizeEmail(email) {
   return email.trim().toLowerCase()
 }
 
-// Ne garde que ce dont l'interface a besoin, jamais le sel ni l'empreinte.
-function versUtilisateurPublic(utilisateur) {
-  return { id: utilisateur.id, nom: utilisateur.nom, email: utilisateur.email }
+// The salt and the hash must never reach the interface.
+function toPublicUser(user) {
+  return { id: user.id, name: user.name, email: user.email }
 }
 
-// Crée un compte et ouvre la session. Lance une erreur si l'e-mail est déjà pris.
-export async function inscrire({ nom, email, motDePasse }) {
-  const emailNormalise = normaliserEmail(email)
-  const sel = genererSel()
-  const motDePasseHache = await hacherMotDePasse(motDePasse, sel)
+export async function signUp({ name, email, password }) {
+  const normalizedEmail = normalizeEmail(email)
+  const salt = generateSalt()
+  const passwordHash = await hashPassword(password, salt)
+  const users = readUsers()
 
-  const utilisateurs = lireDonnee(CLE_UTILISATEURS, [])
-  if (utilisateurs.some((utilisateur) => utilisateur.email === emailNormalise)) {
+  if (users.some((user) => user.email === normalizedEmail)) {
     throw new Error('Cette adresse e-mail est déjà utilisée.')
   }
 
-  const nouvelUtilisateur = {
+  const newUser = {
     id: crypto.randomUUID(),
-    nom: nom.trim(),
-    email: emailNormalise,
-    sel,
-    motDePasseHache,
+    name: name.trim(),
+    email: normalizedEmail,
+    salt,
+    passwordHash,
   }
 
-  ecrireDonnee(CLE_UTILISATEURS, [...utilisateurs, nouvelUtilisateur])
-  ecrireDonnee(CLE_SESSION, { utilisateurId: nouvelUtilisateur.id })
+  writeStoredValue(USERS_KEY, [...users, newUser])
+  openSession(newUser)
 
-  return versUtilisateurPublic(nouvelUtilisateur)
+  return toPublicUser(newUser)
 }
 
-// Ouvre la session si l'e-mail et le mot de passe sont bons.
-// Le message ne dit pas lequel des deux est faux, pour ne pas révéler qui a un compte.
-export async function connecter({ email, motDePasse }) {
-  const emailNormalise = normaliserEmail(email)
-  const utilisateur = lireDonnee(CLE_UTILISATEURS, []).find(
-    (compte) => compte.email === emailNormalise,
-  )
-  const motDePasseHache = utilisateur
-    ? await hacherMotDePasse(motDePasse, utilisateur.sel)
-    : null
+export async function logIn({ email, password }) {
+  const normalizedEmail = normalizeEmail(email)
+  const user = readUsers().find((account) => account.email === normalizedEmail)
+  const passwordHash = user ? await hashPassword(password, user.salt) : null
 
-  if (!utilisateur || motDePasseHache !== utilisateur.motDePasseHache) {
+  // The message never says which field is wrong, so it cannot reveal who has an account.
+  if (!user || passwordHash !== user.passwordHash) {
     throw new Error('E-mail ou mot de passe incorrect.')
   }
 
-  ecrireDonnee(CLE_SESSION, { utilisateurId: utilisateur.id })
+  openSession(user)
 
-  return versUtilisateurPublic(utilisateur)
+  return toPublicUser(user)
 }
 
-// Ferme la session. Le compte et ses données restent enregistrés.
-export function deconnecter() {
-  supprimerDonnee(CLE_SESSION)
+export function logOut() {
+  removeStoredValue(SESSION_KEY)
 }
 
-// Renvoie l'utilisateur de la session, ou null si personne n'est connecté.
-// C'est ce qui garde la session ouverte quand on recharge la page.
-export function lireUtilisateurConnecte() {
-  const session = lireDonnee(CLE_SESSION, null)
+export function getCurrentUser() {
+  const session = readStoredValue(SESSION_KEY, null)
 
   if (!session) return null
 
-  const utilisateur = lireDonnee(CLE_UTILISATEURS, []).find(
-    (compte) => compte.id === session.utilisateurId,
-  )
-  
-  return utilisateur ? versUtilisateurPublic(utilisateur) : null
+  const user = readUsers().find((account) => account.id === session.userId)
+
+  return user ? toPublicUser(user) : null
 }
